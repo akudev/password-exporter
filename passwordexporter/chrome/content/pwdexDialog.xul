@@ -20,12 +20,8 @@
   <script type="application/x-javascript" src="chrome://passwordexporter/content/pwdex-global.js" />
   <!-- Login Manager (Firefox 3+) -->
   <script type="application/x-javascript" src="chrome://passwordexporter/content/pwdex-loginmanager.js" />
-  <!-- Password Manager (Firefox <= 2, Thunderbird, other) -->
-  <script type="application/x-javascript" src="chrome://passwordexporter/content/pwdex-passwordmanager.js" />
   <!-- Legacy Storage code -->
   <script type="application/x-javascript" src="chrome://passwordexporter/content/storage-Legacy.js" />
-  <!-- l10n -->
-  <script type="application/x-javascript" src="chrome://global/content/strres.js" />
 
   <vbox flex="1" id="pwdex-tabpanel">
     <groupbox>

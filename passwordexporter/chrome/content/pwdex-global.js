@@ -2,10 +2,10 @@
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
- *
- * The Initial Developer of the Original Code is
- *    Justin Scott <fligtar@gmail.com>.
  **/
+
+Components.utils.import("resource://gre/modules/Services.jsm");
+Components.utils.import("chrome://pwdex-modules/content/common.js");
 
 /**
  * Password Exporter - Global
@@ -15,7 +15,6 @@ var CC_loginManager = Components.classes["@mozilla.org/login-manager;1"];
 
 var passwordExporter = {
     version: '1.1', // Incrementing requires new license acceptance
-    bundle: null,
     appName: null,
     linebreak: null,
     accepted: false, // whether user has accepted this version's license
@@ -28,7 +27,6 @@ var passwordExporter = {
     // Called on load and on privacy pref tab load to create the tab overlay because the <tabs> we need doesn't have an ID
     init: function() {
         this.checkDebug();
-        this.bundle = srGetStrBundle("chrome://passwordexporter/locale/passwordexporter.properties");
         this.linebreak = this.getLinebreak();
         this.appName = Application.name;
 
