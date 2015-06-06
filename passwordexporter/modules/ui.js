@@ -9,6 +9,7 @@ var EXPORTED_SYMBOLS = [];
 const Cc = Components.classes;
 const Ci = Components.interfaces;
 
+Components.utils.import("resource://gre/modules/Services.jsm");
 Components.utils.import("chrome://pwdex-modules/content/common.js");
 
 PwdEx.UI = {
@@ -93,10 +94,17 @@ PwdEx.UI = {
   openPwdExWindow : function(aWindow) {
     this._logger.debug("openPwdExWindow");
 
-    pwdexDiag =
+    let win = Services.wm.getMostRecentWindow("passwordexporter-dialog");
+
+    // check if a window is already open.
+    if ((null != win) && !win.closed) {
+      win.focus();
+    } else {
       aWindow.openDialog(
-        "chrome://passwordexporter/content/pwdexDialog.xul", "",
-        "chrome,resizable,centerscreen,close=no,modal");
+        "chrome://passwordexporter/content/pwdexDialog.xul",
+        "passwordexporter-dialog",
+        "chrome,centerscreen,dialog,resizable");
+    }
   },
 
   /**
