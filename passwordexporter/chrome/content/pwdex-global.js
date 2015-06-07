@@ -6,6 +6,8 @@
 
 Components.utils.import("resource://gre/modules/Services.jsm");
 Components.utils.import("chrome://pwdex-modules/content/common.js");
+Components.utils.import("chrome://pwdex-modules/content/io.js");
+Components.utils.import("chrome://pwdex-modules/content/ui.js");
 
 /**
  * Password Exporter - Global

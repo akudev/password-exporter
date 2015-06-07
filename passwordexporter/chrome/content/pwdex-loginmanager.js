@@ -24,35 +24,39 @@ var passwordExporterLoginMgr = {
             passwordExporter.checkAgreement();
 
             if (passwordExporter.accepted == true) {
-                var fp = Components.classes["@mozilla.org/filepicker;1"].createInstance(Components.interfaces.nsIFilePicker);
-                var stream = Components.classes["@mozilla.org/network/file-output-stream;1"].createInstance(Components.interfaces.nsIFileOutputStream);
-
-                // Prompt user to select where to save the export
-                fp.init(window, PwdEx.stringBundle.GetStringFromName('passwordexporter.filepicker-title'), fp.modeSave);
-                fp.defaultString = 'password-export-' + passwordExporter.getDateString();
-                fp.defaultExtension = '.xml';
-                fp.appendFilter(PwdEx.stringBundle.GetStringFromName('passwordexporter.filepicker-save-xml'), '*.xml');
-                fp.appendFilter(PwdEx.stringBundle.GetStringFromName('passwordexporter.filepicker-save-csv'), '*.csv');
-
+                let result = PwdEx.UI.openExportFilePicker(window);
                 // If cancelled, return
-                if (fp.show() == fp.returnCancel)
+                if (null == result)
                     return;
 
-                // Remove file if it exists
-                if (fp.file.exists())
-                    fp.file.remove(true);
+                let stream = Components.classes["@mozilla.org/network/file-output-stream;1"].createInstance(Components.interfaces.nsIFileOutputStream);
 
-                fp.file.create(fp.file.NORMAL_FILE_TYPE, 0666);
-                stream.init(fp.file, 0x02, 0x200, null);
+                // Remove file if it exists
+                if (result.file.exists()) {
+                    result.file.remove(true);
+                }
+
+                result.file.create(result.file.NORMAL_FILE_TYPE, 0666);
+                stream.init(result.file, 0x02, 0x200, null);
 
                 // Whether to encrypt the passwords
                 var encrypt = document.getElementById('pwdex-encrypt').checked;
+                var content = "";
+
+                alert(result.type);
 
                 // do export
-                if (fp.filterIndex == 0)
-                    var content = this.export('xml', encrypt);
-                else if (fp.filterIndex == 1)
-                    var content = this.export('csv', encrypt);
+                switch (result.type) {
+                    case PwdEx.IO.TYPE_JSON:
+                        // TODO
+                        break;
+                    case PwdEx.IO.TYPE_XML:
+                        content = this.export('xml', encrypt);
+                        break;
+                    case PwdEx.IO.TYPE_CSV:
+                        content = this.export('csv', encrypt);
+                        break;
+                }
 
                 stream.write(content, content.length);
                 stream.close();

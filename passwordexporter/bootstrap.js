@@ -79,6 +79,7 @@ let PwdExBoot = {
     }
 
     Components.utils.unload("chrome://pwdex-modules/content/ui.js");
+    Components.utils.unload("chrome://pwdex-modules/content/io.js");
     Components.utils.unload("chrome://pwdex-modules/content/common.js");
   },
 

@@ -95,6 +95,14 @@ if ("undefined" == typeof(PwdEx)) {
       Components.utils.import("resource://gre/modules/FileUtils.jsm");
 
       return FileUtils.getDir("ProfD", [ "PasswordExporter" ], true);
+    },
+
+    /**
+     * Gets the string from the string bundle.
+     * @param aKey the key that identifies the string.
+     */
+    getString : function(aKey) {
+      return this.stringBundle.GetStringFromName(aKey);
     }
   };
 

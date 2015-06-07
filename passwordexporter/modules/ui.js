@@ -11,6 +11,7 @@ const Ci = Components.interfaces;
 
 Components.utils.import("resource://gre/modules/Services.jsm");
 Components.utils.import("chrome://pwdex-modules/content/common.js");
+Components.utils.import("chrome://pwdex-modules/content/io.js");
 
 PwdEx.UI = {
   /* Logger for this object. */
@@ -108,6 +109,36 @@ PwdEx.UI = {
   },
 
   /**
+   * Opens the file picker for an export operation.
+   * @param aWindow the parent window for the file picker.
+   * @return object with chosen file and file type, null if no choice was made.
+   */
+  openExportFilePicker : function(aWindow) {
+    this._logger.debug("openExportFilePicker");
+
+    let picker =
+      Cc["@mozilla.org/filepicker;1"].createInstance(Ci.nsIFilePicker);
+    let result = null;
+
+    picker.init(
+      aWindow, PwdEx.getString("passwordexporter.filepicker-title"),
+      picker.modeSave);
+    picker.defaultString =
+      "password-export-" + this._getDateString() + ".json";
+    picker.defaultExtension = "json";
+    // XXX: the filter ordering matches the constants in PwdEx.IO
+    picker.appendFilter("JSON", "*.json");
+    picker.appendFilter("XML", "*.xml");
+    picker.appendFilter("CSV", "*.csv");
+
+    if (picker.returnCancel != picker.show()) {
+      result = { file : picker.file, type : picker.filterIndex };
+    }
+
+    return result;
+  },
+
+  /**
    * Create the password exporter button node.
    * @param aDocument the document the create the node in.
    * @return the node corresponding to the button.
@@ -120,16 +151,31 @@ PwdEx.UI = {
 
     button.setAttribute("id", "pwdex-button");
     button.setAttribute(
-      "label",
-      PwdEx.stringBundle.GetStringFromName("passwordexporter.button-label"));
+      "label", PwdEx.getString("passwordexporter.button-label"));
     button.setAttribute(
-      "accesskey",
-      PwdEx.stringBundle.GetStringFromName("passwordexporter.button-accesskey"));
+      "accesskey", PwdEx.getString("passwordexporter.button-accesskey"));
     button.addEventListener(
       "command",  function(e) { that.openPwdExWindow(aDocument.defaultView); },
       false);
 
     return button;
+  },
+
+  /**
+   * Returns current date in YYYY-MM-DD format for default file names.
+   */
+  _getDateString: function() {
+    this._logger.trace("_getDateString");
+
+    let date = new Date();
+    let year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+
+    month = (month < 10 ? '0' + month : month);
+    day = (day < 10 ? '0' + day : day);
+
+    return (year + "-" + month + "-" + day);
   }
 };
 
