@@ -1,6 +1,7 @@
 content     passwordexporter    chrome/content/
 content     pwdex-modules       modules/
 
+locale      passwordexporter    ca      chrome/locale/ca/
 locale      passwordexporter    da-DK   chrome/locale/da-DK/
 locale      passwordexporter    de      chrome/locale/de/
 locale      passwordexporter    en-US   chrome/locale/en-US/

@@ -30,9 +30,6 @@ var passwordExporter = {
     init: function() {
         this.checkDebug();
         this.linebreak = this.getLinebreak();
-        this.appName = Application.name;
-
-        this.debug('App: ' + this.appName);
 
         // Include import/export functions
         this.export = passwordExporterLoginMgr.export;
@@ -43,12 +40,9 @@ var passwordExporter = {
 
     // opens passwordmanager.xul to view passwords.. called from button on pwdexDialog.xul only
     viewPasswords: function() {
-        // using window.open, doing certain things will cause firefox to minimize completely when the window is closed
-        // hence using window.opener.open
-        if (this.appName == 'SeaMonkey')
-            window.opener.openDialog("chrome://communicator/content/passwordManager.xul", "", "chrome,resizable,centerscreen,maximize=no");
-        else
-            window.opener.open("chrome://passwordmgr/content/passwordManager.xul", "", "chrome,resizable,centerscreen,maximize=no");
+      window.opener.open(
+        "chrome://passwordmgr/content/passwordManager.xul", "",
+        "chrome,resizable,centerscreen,maximize=no");
     },
 
     // checks to see if user has accepted notice for this version and if not, shows window
