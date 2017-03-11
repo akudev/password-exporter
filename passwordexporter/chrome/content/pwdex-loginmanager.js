@@ -20,10 +20,13 @@ var passwordExporterLoginMgr = {
         start: function() {
             passwordExporter.debug('Starting Export...');
 
+            let masterPassword;
+
             // Check if user has accepted agreement
             passwordExporter.checkAgreement();
+            masterPassword = this._showMasterPasswordPrompt();
 
-            if (passwordExporter.accepted == true) {
+            if (masterPassword && passwordExporter.accepted == true) {
                 let result = PwdEx.UI.openExportFilePicker(window);
                 // If cancelled, return
                 if (null == result)
@@ -42,9 +45,6 @@ var passwordExporterLoginMgr = {
                 // Whether to encrypt the passwords
                 var encrypt = document.getElementById('pwdex-encrypt').checked;
                 var content = "";
-
-                alert(result.type);
-
                 // do export
                 switch (result.type) {
                     case PwdEx.IO.TYPE_JSON:
@@ -117,6 +117,36 @@ var passwordExporterLoginMgr = {
             }
 
             return this.currentExport;
+        },
+
+        // Show the master password prompt if needed. Adapted from:
+        // https://dxr.mozilla.org/mozilla-central/rev/88bebcaca249aeaca9197382e89d35b02be8292e/toolkit/components/passwordmgr/content/passwordManager.js#494
+        _showMasterPasswordPrompt: function() {
+          // This doesn't harm if passwords are not encrypted
+          var tokendb =
+              Components.classes["@mozilla.org/security/pk11tokendb;1"].
+                  createInstance(Components.interfaces.nsIPK11TokenDB);
+          var token = tokendb.getInternalKeyToken();
+
+          // If there is no master password, still give the user a chance to
+          // opt-out of displaying passwords
+          if (token.checkPassword(""))
+            return true;
+
+          // So there's a master password. But since checkPassword didn't
+          //  succeed, we're logged out (per nsIPK11Token.idl).
+          try {
+            // Relogin and ask for the master password.
+            // 'true' means always prompt for token password. User will be
+            // prompted until clicking 'Cancel' or entering the correct
+            // password.
+            token.login(true);
+          } catch (e) {
+            // An exception will be thrown if the user cancels the login prompt
+            // dialog. User is also logged out of Software Security Device.
+          }
+
+          return token.isLoggedIn();
         },
 
         // Records an nsILoginInfo entry to XML

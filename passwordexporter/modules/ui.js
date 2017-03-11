@@ -6,9 +6,6 @@
 
 var EXPORTED_SYMBOLS = [];
 
-const Cc = Components.classes;
-const Ci = Components.interfaces;
-
 Components.utils.import("resource://gre/modules/Services.jsm");
 Components.utils.import("chrome://pwdex-modules/content/common.js");
 Components.utils.import("chrome://pwdex-modules/content/io.js");
@@ -54,8 +51,8 @@ PwdEx.UI = {
 
     if (null != aDocument.getElementById("securityPrefs")) {
       let container =
-        aDocument.getElementById("securityPrefs").getElementsByTagName("tabpanel")[3].
-          getElementsByTagName("hbox")[0];
+        aDocument.getElementById("securityPrefs").
+          getElementsByTagName("tabpanel")[3].getElementsByTagName("hbox")[0];
 
       if (null != container) {
         container.appendChild(this._createPwdExButton(aDocument));
@@ -117,17 +114,21 @@ PwdEx.UI = {
     this._logger.debug("openExportFilePicker");
 
     let picker =
-      Cc["@mozilla.org/filepicker;1"].createInstance(Ci.nsIFilePicker);
+      Components.classes["@mozilla.org/filepicker;1"].
+        createInstance(Components.interfaces.nsIFilePicker);
     let result = null;
 
     picker.init(
       aWindow, PwdEx.getString("passwordexporter.filepicker-title"),
       picker.modeSave);
-    picker.defaultString =
+    /*picker.defaultString =
       "password-export-" + this._getDateString() + ".json";
-    picker.defaultExtension = "json";
+    picker.defaultExtension = "json";*/
+    picker.defaultString =
+      "password-export-" + this._getDateString() + ".xml";
+    picker.defaultExtension = "xml";
     // XXX: the filter ordering matches the constants in PwdEx.IO
-    picker.appendFilter("JSON", "*.json");
+    //picker.appendFilter("JSON", "*.json");
     picker.appendFilter("XML", "*.xml");
     picker.appendFilter("CSV", "*.csv");
 

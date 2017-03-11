@@ -15,10 +15,10 @@ Components.utils.import("chrome://pwdex-modules/content/common.js");
 PwdEx.IO = {
   /* Logger for this object. */
   _logger : null,
-
-  TYPE_JSON : function() { return 0; },
-  TYPE_XML : function() { return 1; },
-  TYPE_CSV : function() { return 2; },
+  // TODO: increment by 1 when we have JSON support.
+  TYPE_JSON :  -1,
+  TYPE_XML :  0,
+  TYPE_CSV :  1,
 
   /**
    * Initializes the object.
