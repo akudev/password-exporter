@@ -391,8 +391,8 @@ var passwordExporterLoginMgr = {
                                                 ((entries[i].getAttribute('httpRealm') == null || entries[i].getAttribute('httpRealm') == "") ? null : unescape(entries[i].getAttribute('httpRealm'))),
                                                 unescape(entries[i].getAttribute('user')),
                                                 unescape(entries[i].getAttribute('password')),
-                                                (entries[i].getAttribute('userFieldName') == null ? null : unescape(entries[i].getAttribute('userFieldName'))),
-                                                (entries[i].getAttribute('passFieldName') == null ? null : unescape(entries[i].getAttribute('passFieldName')))
+                                                (entries[i].getAttribute('userFieldName') == null ? "" : unescape(entries[i].getAttribute('userFieldName'))),
+                                                (entries[i].getAttribute('passFieldName') == null ? "" : unescape(entries[i].getAttribute('passFieldName')))
                                             );
 
                         var formattedLogins = this.getFormattedLogin(properties, loginInfo);
@@ -427,8 +427,8 @@ var passwordExporterLoginMgr = {
                                                     null, // httpRealm
                                                     unescape(fields[1]), // username
                                                     unescape(fields[2]), // password
-                                                    (fields[3] == '' ? null : unescape(fields[3])), // usernameField
-                                                    (fields[4] == '' ? null : unescape(fields[4])) // passwordField
+                                                    (fields[3] == '' ? "" : unescape(fields[3])), // usernameField
+                                                    (fields[4] == '' ? "" : unescape(fields[4])) // passwordField
                                                 );
                         }
                         else {
@@ -441,8 +441,8 @@ var passwordExporterLoginMgr = {
                                                     (fields[4] == '' ? null : unescape(fields[4])), // httpRealm
                                                     unescape(fields[1]), // username
                                                     unescape(fields[2]), // password
-                                                    (fields[5] == '' ? null : unescape(fields[5])), // usernameField
-                                                    (fields[6] == '"' ? null : unescape(fields[6].replace('"', ''))) // passwordField
+                                                    (fields[5] == '' ? "" : unescape(fields[5])), // usernameField
+                                                    (fields[6] == '"' ? "" : unescape(fields[6].replace('"', ''))) // passwordField
                                                 );
                         }
 
